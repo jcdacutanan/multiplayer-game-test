@@ -19,7 +19,12 @@
 
     <script>
         // const socket = new WebSocket('ws://' + window.location.hostname + ':3000');
-        const socket = new WebSocket('wss://yourgame.up.railway.app'); // Use live WebSocket URL
+        const testSocket = new WebSocket('wss://yourgame.up.railway.app');
+
+        testSocket.onopen = () => console.log("Connected to WebSocket!");
+        testSocket.onerror = (error) => console.error("WebSocket Error:", error);
+        testSocket.onmessage = (msg) => console.log("Message from server:", msg.data);
+
         
         let playerId = null;
     
