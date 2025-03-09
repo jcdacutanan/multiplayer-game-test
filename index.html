@@ -18,7 +18,9 @@
     <button id="p2-decrement" disabled onclick="updateCounter(-1, 2)">Player 2 Decrement</button>
 
     <script>
-        const socket = new WebSocket('ws://' + window.location.hostname + ':3000');
+        // const socket = new WebSocket('ws://' + window.location.hostname + ':3000');
+        const socket = new WebSocket('wss://yourgame.up.railway.app'); // Use live WebSocket URL
+        
         let playerId = null;
     
         socket.onmessage = (event) => {
