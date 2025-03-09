@@ -19,7 +19,7 @@
 
     <script>
         // const socket = new WebSocket('ws://' + window.location.hostname + ':3000');
-        const testSocket = new WebSocket('wss://yourgame.up.railway.app');
+        const testSocket = new WebSocket('wss://multiplayer-game-test-production.up.railway.app');
 
         testSocket.onopen = () => console.log("Connected to WebSocket!");
         testSocket.onerror = (error) => console.error("WebSocket Error:", error);
