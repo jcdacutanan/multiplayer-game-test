@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Player Counter</title>
+</head>
+<body>
+    <h1>Two-Player Real-Time Counter</h1>
+    <p>You are <strong id="playerRole">Waiting...</strong></p>
+
+    <p>Player 1 Counter: <span id="counter1">0</span></p>
+    <button id="p1-increment" disabled onclick="updateCounter(1, 1)">Player 1 Increment</button>
+    <button id="p1-decrement" disabled onclick="updateCounter(-1, 1)">Player 1 Decrement</button>
+    
+    <p>Player 2 Counter: <span id="counter2">0</span></p>
+    <button id="p2-increment" disabled onclick="updateCounter(1, 2)">Player 2 Increment</button>
+    <button id="p2-decrement" disabled onclick="updateCounter(-1, 2)">Player 2 Decrement</button>
+
+    <script>
+        const socket = new WebSocket('ws://' + window.location.hostname + ':3000');
+        let playerId = null;
+    
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+    
+            // Case 1: First connection - Assign player ID and initialize counters
+            if ('playerId' in data) {
+                playerId = data.playerId;
+                document.getElementById("playerRole").innerText = `Player ${playerId}`;
+    
+                if (playerId === 1) {
+                    document.getElementById("p1-increment").disabled = false;
+                    document.getElementById("p1-decrement").disabled = false;
+                } else if (playerId === 2) {
+                    document.getElementById("p2-increment").disabled = false;
+                    document.getElementById("p2-decrement").disabled = false;
+                }
+    
+                // Update counters from initial data
+                document.getElementById('counter1').innerText = data.counters.counter1;
+                document.getElementById('counter2').innerText = data.counters.counter2;
+            } 
+            // Case 2: Regular counter update message
+            else {
+                document.getElementById('counter1').innerText = data.counter1;
+                document.getElementById('counter2').innerText = data.counter2;
+            }
+        };
+    
+        function updateCounter(value, player) {
+            if (player === playerId) {
+                socket.send(JSON.stringify({ player, change: value }));
+            }
+        }
+    </script>
+    
+</body>
+</html>
